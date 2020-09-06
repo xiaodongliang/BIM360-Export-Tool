@@ -1,0 +1,27 @@
+{
+  "name": "mysimplenodeapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@adsk/bim360-nucleus-scopes": "^3.0.39",
+    "body-parser": "^1.18.3",
+    "esm": "^3.2.25",
+    "express": "^4.16.4",
+    "forge-apis": "^0.4.5",
+    "fs": "0.0.1-security",
+    "node-fetch": "^2.3.0",
+    "opn": "^5.5.0",
+    "readline": "^1.3.0",
+    "request": "^2.88.0",
+    "exceljs": "^3.3.1"
+  },
+  "devDependencies": {
+    "@babel/register": "^7.5.5"
+  }
+}
