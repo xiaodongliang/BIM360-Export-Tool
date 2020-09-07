@@ -56,6 +56,11 @@ const companyColumns = [
 
     { id: 'services_documentManagement',           propertyName: 'services_documentManagement',           columnTitle: 'services_documentManagement',        columnWidth: 16,    locked: false },
     { id: 'services_projectAdministration',           propertyName: 'services_projectAdministration',           columnTitle: 'services_projectAdministration',        columnWidth: 16,    locked: false },
+    { id: 'services_costManagement',           propertyName: 'services_costManagement',           columnTitle: 'services_costManagement',        columnWidth: 16,    locked: false },
+    { id: 'services_assets',           propertyName: 'services_assets',           columnTitle: 'services_assets',        columnWidth: 16,    locked: false },
+    { id: 'services_designCollaboration',           propertyName: 'services_designCollaboration',           columnTitle: 'services_designCollaboration',        columnWidth: 16,    locked: false },
+    { id: 'services_fieldManagement',           propertyName: 'services_fieldManagement',           columnTitle: 'services_fieldManagement',        columnWidth: 16,    locked: false },
+    { id: 'services_insight',           propertyName: 'services_insight',           columnTitle: 'services_insight',        columnWidth: 16,    locked: false }
 
  ]; 
 

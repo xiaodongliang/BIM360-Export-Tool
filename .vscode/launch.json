@@ -11,7 +11,7 @@
             "program": "${workspaceFolder}/index.js",
             "args": [
                 "-data",
-                "project|company|accountUser|projectUser"
+                "project|company|accountUser|projectUser|issue>Forge Concert Hall"
             ]
         }
     ]
