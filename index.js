@@ -13,6 +13,7 @@ app.use(urlencodedParser); // This will parse your body and make it available fo
 const tokenRoute = require('./forgeToken');  
 const exportExcel = require('./exportExcel')
 const forgeEndpoints = require('./forgeEndpoints')
+const columnDefs = require('./columnDefs')
 
 const config = require('./config');
 app.use('/', tokenRoute.router);  
@@ -27,8 +28,12 @@ server.listen(app.get('port'), function() {
 const args = process.argv.slice(2);
 console.log(`args:${args}`);
 
+
 // admin data: use 2 legged token 
 // documents data, use 2 or 3 legged token. To save codes, this sample uses 2 legged token
+
+forgeToken.get2LeggedToken();
+
 const flagIndex = args.findIndex(ele => ele == '-data')
 const dataType = flagIndex != null ? args[flagIndex + 1] : null
 const typeArray = dataType.split('|');

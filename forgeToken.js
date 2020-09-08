@@ -6,6 +6,8 @@ const router = express.Router();
 
 const config = require('./config'); 
 const exportExcel = require('./exportExcel')
+const columnDefs = require('./columnDefs')
+
 const forgeEndpoints = require('./forgeEndpoints')
 
 const { get,post} = require('./fetch_unit'); //We may only need GET when exporting records
@@ -34,7 +36,7 @@ async function get2LeggedToken() {
     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
   }
   const results = await post(endpoint, headers,formBody)
-  return results
+  config.token_2legged =  results.access_token
 } 
 
 // 3 legged token functions 
@@ -100,6 +102,8 @@ module.exports = {
 
 async function process3LeggedExport(){
 
+  forgeEndpoints.resetDefs();
+
   const types_3legged = config.types_3legged
   const typeArray = types_3legged.split('|');
 
@@ -110,7 +114,9 @@ async function process3LeggedExport(){
     try{
         var allIssues = [];
         allIssues = await forgeEndpoints.getProjectIssues(config.bim360_account_id,projectName,config.limit,0,allIssues);
-        exportExcel._export('project','issues',columnDefs.projectColumns,allProjects)
+        exportExcel._export('issues',`${projectName}`,columnDefs.issueColumns,allIssues)
+        console.log(`export project issues list done`)
+
       }catch(e){
           console.error(`export project issues list exception:${e}`)
       }

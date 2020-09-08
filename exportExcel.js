@@ -21,7 +21,8 @@ async function _export(exportName,subName,columnDef,data){
         for (const column of columnDef) {
             if (column.format) {
                 row[column.id] = column.format(d[column.propertyName]);
-            } else {
+            }  
+                else {
                 row[column.id] = d[column.propertyName];
             }
         }

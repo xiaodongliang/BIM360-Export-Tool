@@ -74,11 +74,22 @@ const companyColumns = [
  
 
  const issueColumns = [
-    { id: 'id',             propertyName: 'id',                    columnTitle: 'ID',              columnWidth: 8,     locked: true },
-    { id: 'name',           propertyName: 'name',                  columnTitle: 'Name',           columnWidth: 16,    locked: false },
-    { id: 'trade',     propertyName: 'trade',            columnTitle: 'Trade',     columnWidth: 16,    locked: false },
-    { id: 'erp_id',       propertyName: 'erp_id',              columnTitle: 'Erp Id',       columnWidth: 16,    locked: true},
-    { id: 'website_url',   propertyName: 'website_url',          columnTitle: 'Website Url',          columnWidth: 16,    locked: false }
+    { id: 'id',             propertyName: 'id',                    columnTitle: 'id',              columnWidth: 8,     locked: true },
+    { id: 'title',           propertyName: 'title',                  columnTitle: 'title',           columnWidth: 16,    locked: false },
+    { id: 'description',     propertyName: 'description',            columnTitle: 'description',     columnWidth: 16,    locked: false },
+    { id: 'status',       propertyName: 'status',              columnTitle: 'status',       columnWidth: 16,    locked: true},
+    { id: 'dueDate',       propertyName: 'dueDate',              columnTitle: 'dueDate',       columnWidth: 16,    locked: true},
+
+    { id: 'assigned_to',   propertyName: 'assigned_to',          columnTitle: 'assigned_to',          columnWidth: 16,    locked: false },
+    { id: 'assigned_to_type',   propertyName: 'assigned_to_type',          columnTitle: 'assigned_to_type',          columnWidth: 16,    locked: false },
+    { id: 'issue_type',   propertyName: 'issue_type',          columnTitle: 'issue_type',          columnWidth: 16,    locked: false },
+    { id: 'issue_subtype',   propertyName: 'issue_subtype',          columnTitle: 'issue_subtype',          columnWidth: 16,    locked: false },
+
+    { id: 'root_cause',   propertyName: 'root_cause',          columnTitle: 'root_cause',          columnWidth: 16,    locked: false },
+    { id: 'isPushpinIssue',   propertyName: 'isPushpinIssue',          columnTitle: 'isPushpinIssue',          columnWidth: 16,    locked: false },
+    { id: 'comments',   propertyName: 'comments',          columnTitle: 'comments',          columnWidth: 16,    locked: false },
+    { id: 'attachment_count',   propertyName: 'attachment_count',          columnTitle: 'attachment_count',          columnWidth: 16,    locked: false },
+    { id: 'customAttributes',   propertyName: 'customAttributes',          columnTitle: 'customAttributes',          columnWidth: 16,    locked: false }
  ]; 
 
  const rfiColumns = [
