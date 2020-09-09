@@ -7,6 +7,7 @@ const router = express.Router();
 const config = require('./config'); 
 const exportExcel = require('./exportExcel')
 const columnDefs = require('./columnDefs')
+const utility = require('./utility');
 
 const forgeEndpoints = require('./forgeEndpoints')
 
@@ -100,16 +101,13 @@ module.exports = {
 };
 
 
-async function process3LeggedExport(){
-
-  forgeEndpoints.resetDefs();
+async function process3LeggedExport(){ 
 
   const types_3legged = config.types_3legged
-  const typeArray = types_3legged.split('|');
 
-  if (typeArray.findIndex(t => t.includes('issue')) >-1) {
-    const index = typeArray.findIndex(t => t.includes('issue'))
-    const projectName = typeArray[index].split('>')[1];  
+  if (types_3legged.findIndex(t => t.includes('issue')) >-1) {
+    const index = types_3legged.findIndex(t => t.includes('issue'))
+    const projectName = types_3legged[index].split('>')[1];  
     
     try{
         var allIssues = [];
@@ -122,6 +120,29 @@ async function process3LeggedExport(){
       }
 
   }
+
+  if (types_3legged.findIndex(t => t.includes('document')) > -1) {
+        
+    try {
+         const index = types_3legged.findIndex(t => t.includes('document'))
+        const projectName = types_3legged[index].split('>')[1];  
+        if(projectName!=''){
+            var allDocuments = [];
+            allDocuments = await forgeEndpoints.getProjectDocuments(config.bim360_account_id, 
+                                                                projectName,
+                                                                config.limit, 0, allDocuments);
+            
+            //console.log(`getting project ${projectName}>>folder${folderName} documemts done`);
+            allDocuments = utility.flatDeep(allDocuments,Infinity)
+            exportExcel._export('project', 'documents', columnDefs.projectDocumentsColumns, allDocuments)
+        }else{
+            console.log('please input project name with the arguments!')
+        }
+        
+    } catch (e) {
+        console.error(`export project documents list exception:${e}`)
+    } 
+} 
 
 
 }

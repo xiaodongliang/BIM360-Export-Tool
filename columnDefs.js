@@ -91,29 +91,19 @@ const companyColumns = [
     { id: 'attachment_count',   propertyName: 'attachment_count',          columnTitle: 'attachment_count',          columnWidth: 16,    locked: false },
     { id: 'customAttributes',   propertyName: 'customAttributes',          columnTitle: 'customAttributes',          columnWidth: 16,    locked: false }
  ]; 
-
- const rfiColumns = [
-    { id: 'id',             propertyName: 'id',                    columnTitle: 'ID',              columnWidth: 8,     locked: true },
-    { id: 'name',           propertyName: 'name',                  columnTitle: 'Name',           columnWidth: 16,    locked: false },
-    { id: 'trade',     propertyName: 'trade',            columnTitle: 'Trade',     columnWidth: 16,    locked: false },
-    { id: 'erp_id',       propertyName: 'erp_id',              columnTitle: 'Erp Id',       columnWidth: 16,    locked: true},
-    { id: 'website_url',   propertyName: 'website_url',          columnTitle: 'Website Url',          columnWidth: 16,    locked: false }
- ]; 
-
- const checklistInsColumns = [
-    { id: 'id',             propertyName: 'id',                    columnTitle: 'ID',              columnWidth: 8,     locked: true },
-    { id: 'name',           propertyName: 'name',                  columnTitle: 'Name',           columnWidth: 16,    locked: false },
-    { id: 'trade',     propertyName: 'trade',            columnTitle: 'Trade',     columnWidth: 16,    locked: false },
-    { id: 'erp_id',       propertyName: 'erp_id',              columnTitle: 'Erp Id',       columnWidth: 16,    locked: true},
-    { id: 'website_url',   propertyName: 'website_url',          columnTitle: 'Website Url',          columnWidth: 16,    locked: false }
- ]; 
+ 
 
  const documentColumns = [
-    { id: 'id',             propertyName: 'id',                    columnTitle: 'ID',              columnWidth: 8,     locked: true },
-    { id: 'name',           propertyName: 'name',                  columnTitle: 'Name',           columnWidth: 16,    locked: false },
-    { id: 'trade',     propertyName: 'trade',            columnTitle: 'Trade',     columnWidth: 16,    locked: false },
-    { id: 'erp_id',       propertyName: 'erp_id',              columnTitle: 'Erp Id',       columnWidth: 16,    locked: true},
-    { id: 'website_url',   propertyName: 'website_url',          columnTitle: 'Website Url',          columnWidth: 16,    locked: false }
+   { id: 'folder',         propertyName: 'folder',                    columnTitle: 'folder',              columnWidth: 8,     locked: true },
+    { id: 'item_urn',      propertyName: 'item_urn',                    columnTitle: 'item_urn',              columnWidth: 8,     locked: true },
+    { id: 'name',          propertyName: 'name',                  columnTitle: 'name',           columnWidth: 16,    locked: false },
+    { id: 'tipverion',     propertyName: 'tipverion',            columnTitle: 'tipverion',     columnWidth: 16,    locked: false },
+
+    { id: 'lastModifiedUserName',       propertyName: 'lastModifiedUserName',              columnTitle: 'lastModifiedUserName',       columnWidth: 16,    locked: true},
+    { id: 'createUserName',   propertyName: 'createUserName',          columnTitle: 'createUserName',          columnWidth: 16,    locked: false },
+    { id: 'type',   propertyName: 'type',          columnTitle: 'type',          columnWidth: 16,    locked: false },
+    { id: 'sourceFileType',   propertyName: 'sourceFileType',          columnTitle: 'sourceFileType',          columnWidth: 16,    locked: false }
+
  ]; 
 
 
@@ -125,9 +115,7 @@ module.exports = {
     accountUserColumns,
     roleColumns,
     projectUserColumns,
-    issueColumns,
-    rfiColumns,
-    checklistInsColumns,
+    issueColumns, 
     documentColumns 
 };
  
