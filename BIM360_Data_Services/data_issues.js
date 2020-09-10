@@ -8,11 +8,13 @@ var Defs = {}
 async function extractProjectIssues(accountid, projectName, limit, offset, allIssues) {
   try {
     //find project
-    const endpoint = `${config.ForgeBaseUrl}/project/v1/hubs/b.${accountid}/projects?limit=${limit}&offset=${offset}&filter[name]=${projectName}`
+    const endpoint = `${config.ForgeBaseUrl}/project/v1/hubs/b.${accountid}/projects?limit=${limit}&offset=${offset}&filter[name]=${encodeURIComponent(projectName)}`
     const headers = config.httpHeaders(config.token_3legged)
     const response = await get(endpoint, headers);
     if (response.data && response.data.length > 0) {
       const projectId = response.data[0].id
+      const projectId_without_b = projectId.split('b.')[1]
+
       const containerId = response.data[0].relationships.issues.data.id
       Defs[containerId] = {
         allIssueTypes: null,
@@ -36,11 +38,11 @@ async function extractProjectIssues(accountid, projectName, limit, offset, allIs
       Defs[containerId].allIssueCustomAttDefs = allIssueCustomAttDefs
       //dump project users 
       var allProjectUsers = []
-      allProjectUsers = await data_admin.exportProjectsUsers(accountid, projectId, projectName, limit, offset, allProjectUsers)
+      allProjectUsers = await data_admin.exportProjectsUsers(accountid, projectId_without_b, projectName, limit, offset, allProjectUsers)
       Defs[containerId].allProjectUsers = allProjectUsers
       //dump project companies
       var allProjectCompanies = []
-      allProjectCompanies = await data_admin.exportProjectsCompanies(accountid, projectId, limit, offset, allProjectCompanies)
+      allProjectCompanies = await data_admin.exportProjectsCompanies(accountid, projectId_without_b,projectName, limit, offset, allProjectCompanies)
       Defs[containerId].allProjectCompanies = allProjectCompanies
       //now start to dump issue info
       allIssues = await extractProjectIssuesImpl(containerId, limit, offset, allIssues);
@@ -61,14 +63,14 @@ async function extractProjectIssues(accountid, projectName, limit, offset, allIs
 async function extractProjectIssuesImpl(containerId, limit, offset, allIssues) {
   try {
 
-    const endpoint = `${ForgeBaseUrl}/issues/v1/containers/${containerId}/quality-issues?page[limit]=${limit}&page[offset]=${offset}`
-    const headers = httpHeaders(config.token_3legged)
+    const endpoint = `${config.ForgeBaseUrl}/issues/v1/containers/${containerId}/quality-issues?page[limit]=${limit}&page[offset]=${offset}`
+    const headers = config.httpHeaders(config.token_3legged)
     const response = await get(endpoint, headers);
     if (response.data && response.data.length > 0) {
       console.log(`getting issues ${offset} to ${offset + limit}`)
       allIssues = allIssues.concat(response.data);
       await utility.delay(utility.DELAY_MILISECOND);
-      return getProjectIssuesImpl(containerId, limit, allIssues.length, allIssues);
+      return extractProjectIssuesImpl(containerId, limit, allIssues.length, allIssues);
     } else {
 
       //now, sort it out with the explicit data of some properties
@@ -95,7 +97,7 @@ async function extractProjectIssuesImpl(containerId, limit, offset, allIssues) {
             issue.assigned_to = user ? user.name : '<invalid>'
             break;
           case 'company':
-            const company = Defs[containerId].allProjectCompanies.find(i => i.member_group_id == issue.attributes.assigned_to)
+            const company = Defs[containerId].allProjectCompanies.find(i => i.autodeskId == issue.attributes.assigned_to)
             issue.assigned_to = company ? company.name : '<invalid>'
             break;
         }

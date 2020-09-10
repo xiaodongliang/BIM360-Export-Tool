@@ -81,6 +81,10 @@ async function exportProjectsUsers(accountid, projectId, projectName, limit, off
         await utility.delay(index * utility.DELAY_MILISECOND)
 
         var eachUser = {}
+        eachUser.name = u.name
+        eachUser.autodeskId = u.autodeskId
+        eachUser.id = u.id
+
         eachUser.project = projectName; 
         eachUser.company = u.companyId ? await getOneCompany(accountid, u.companyId) : '';
 
