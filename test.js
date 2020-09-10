@@ -10,7 +10,7 @@ const config = require('./config');
 const forgeEndpoints = require('./forgeEndpoints');
 const columnDefs = require('./columnDefs'); 
 const exportExcel = require('./exportExcel'); 
-const utility = require('./utility'); 
+const utility = require('./BIM360_Data_Services/utility'); 
 
 
 // before your routes

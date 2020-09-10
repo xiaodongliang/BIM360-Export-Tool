@@ -1,8 +1,7 @@
 
 
 const readline = require("readline");
-const DELAY_MILISECOND = 500;
-
+const DELAY_MILISECOND = 1000;
 
 async function readLines(prompt) {
   return new Promise(resolve => {
@@ -32,6 +31,7 @@ function flatDeep(arr, d = 1) {
 };
 
 module.exports = {  
+  
   readLines,
   delay,
   DELAY_MILISECOND,
