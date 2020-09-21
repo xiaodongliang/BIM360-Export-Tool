@@ -8,11 +8,20 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/index.js",
+            //"program": "${workspaceFolder}/index.js",
+            "program": "${workspaceFolder}/3lo_export.js",
             "args": [
                 "-data",
-                "project|company|accountUser|projectUser|issue>Forge Concert Hall"
-            ]
+                //"projectRole"
+                "project|accountCompany|accountUser|projectUser|projectCompany|projectRole",
+                //"document>Forge Concert Hall",
+                "issue>Forge Concert Hall" 
+            ],
+            "env":{
+                "FORGE_CLIENT_ID":"<your client id of Forge>",
+                "FORGE_CLIENT_SECRET":"<your client secret of Forge>",
+                "FORGE_CALLBACK_URL":"http://localhost:1234/forgeoauth" 
+            }
         }
     ]
 }

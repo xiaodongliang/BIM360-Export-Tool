@@ -5,6 +5,7 @@ const exportExcel = require('./Excel_Module/exportExcel')
 const data_admin = require('./BIM360_Data_Services/data_admin')
 const columnDefs = require('./Excel_Module/columnDefs');
 const utility = require('./BIM360_Data_Services/utility');
+const PromisePool = require("es6-promise-pool");
 
 //get 2 legged token
 async function get2LeggedToken() {
@@ -41,7 +42,8 @@ async function exportJob(args) {
     if (typeArray && typeArray.findIndex(t => t == 'project') > -1) {
         try {
             var allProjects = [];
-            allProjects = await data_admin.exportProjects(config.bim360_account_id,config.limit,0,allProjects);
+            var pageIndex = 0
+            allProjects = await data_admin.exportProjects(config.bim360_account_id,config.limit,0,allProjects,pageIndex );
             exportExcel._export('account', 'projects', columnDefs.projectColumns, allProjects)
         } catch (e) {
             console.error(`export account projects list exception:${e}`)
@@ -50,7 +52,8 @@ async function exportJob(args) {
     if (typeArray && typeArray.findIndex(t => t == 'accountCompany') > -1) {
         try {
             var allCompanies = [];
-            allCompanies = await data_admin.exportAccountCompanies(config.bim360_account_id, config.limit, 0, allCompanies);
+            var pageIndex = 0
+            allCompanies = await data_admin.exportAccountCompanies(config.bim360_account_id, config.limit, 0, allCompanies,pageIndex);
             exportExcel._export('account', 'companies', columnDefs.accountCompanyColumns, allCompanies)
         } catch (e) {
             console.error(`export account companies list exception:${e}`)
@@ -60,7 +63,8 @@ async function exportJob(args) {
 
         try {
             var allUsers = [];
-            allUsers = await data_admin.exportAccountUsers(config.bim360_account_id, config.limit, 0, allUsers);
+            var pageIndex = 0
+            allUsers = await data_admin.exportAccountUsers(config.bim360_account_id, config.limit, 0, allUsers,pageIndex);
             exportExcel._export('account', 'users', columnDefs.accountUserColumns, allUsers)
         } catch (e) {
             console.error(`export account users list exception:${e}`)
@@ -72,13 +76,15 @@ async function exportJob(args) {
         try {
             //var allProjects = [{id:'6968a5b5-5d39-43cb-b4c4-5c5a1828f8f0',name:'Forge XXX'}];
             var allProjects = [];
-            allProjects = await data_admin.exportProjects(config.bim360_account_id, config.limit, 0, allProjects);
+            var pageIndex = 0
+            allProjects = await data_admin.exportProjects(config.bim360_account_id, config.limit, 0, allProjects,pageIndex);
 
             let promiseArr = allProjects.map(async (proj, index) => {
                 console.log(proj.name);
                 await utility.delay(index * utility.DELAY_MILISECOND)
                 var oneProjectUsers = [];
-                oneProjectUsers = await data_admin.exportProjectsUsers(config.bim360_account_id, proj.id, proj.name, config.limit, 0, oneProjectUsers);
+                var pageIndex = 0 
+                oneProjectUsers = await data_admin.exportProjectsUsers(config.bim360_account_id, proj.id, proj.name, config.limit, 0, oneProjectUsers,pageIndex);
                 return oneProjectUsers;
             });
 
@@ -100,16 +106,17 @@ async function exportJob(args) {
         try {
             //var allProjects = [{id:'6968a5b5-5d39-43cb-b4c4-5c5a1828f8f0',name:'Forge XXX'}];
             var allProjects = [];
-            allProjects = await data_admin.exportProjects(config.bim360_account_id, config.limit, 0, allProjects);
+            var pageIndex = 0
+            allProjects = await data_admin.exportProjects(config.bim360_account_id, config.limit, 0, allProjects,pageIndex);
 
             let promiseArr = allProjects.map(async (proj, index) => {
                 console.log(proj.name);
                 await utility.delay(index * utility.DELAY_MILISECOND)
                 var oneProjectCompanies = [];
-                oneProjectCompanies = await data_admin.exportProjectsCompanies(config.bim360_account_id, proj.id, proj.name, config.limit, 0, oneProjectCompanies);
-                return oneProjectCompanies;
-            });
-
+                oneProjectCompanies = await data_admin.exportProjectsCompanies(config.bim360_account_id, proj.id, proj.name, config.limit, 0, oneProjectCompanies,null);
+                return oneProjectCompanies; 
+            }); 
+            
             console.log('start getting project companies');
             Promise.all(promiseArr).then((resultsArray) => {
                 console.log('getting project companies done:');
@@ -128,13 +135,16 @@ async function exportJob(args) {
         try {
             //var allProjects = [{id:'6968a5b5-5d39-43cb-b4c4-5c5a1828f8f0',name:'Forge XXX'}];
             var allProjects = [];
-            allProjects = await data_admin.exportProjects(config.bim360_account_id, config.limit, 0, allProjects);
+            var pageIndex = 0
+            allProjects = await data_admin.exportProjects(config.bim360_account_id, config.limit, 0, allProjects,pageIndex);
 
             let promiseArr = allProjects.map(async (proj, index) => {
                 console.log(proj.name);
                 await utility.delay(index * utility.DELAY_MILISECOND*2)
                 var oneProjectRoles = [];
-                oneProjectRoles = await data_admin.exportProjectsRoles(config.bim360_account_id, proj.id, proj.name, config.limit, 0, oneProjectRoles);
+                var pageIndex = 0
+
+                oneProjectRoles = await data_admin.exportProjectsRoles(config.bim360_account_id, proj.id, proj.name, config.limit, 0, oneProjectRoles,pageIndex);
                 return oneProjectRoles;
             });
 

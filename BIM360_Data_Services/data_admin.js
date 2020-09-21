@@ -8,16 +8,17 @@ const utility = require('./utility');
 
 
 //export BIM 360 projects, recursive function
-async function exportProjects(accountid, limit, offset, allProjects) {
+async function exportProjects(accountid, limit, offset, allProjects,pageIndex) {
   try {
+    pageIndex++
     const endpoint = `${config.ForgeBaseUrl}/hq/v1/accounts/${accountid}/projects?limit=${limit}&offset=${offset}`
     const headers = config.httpHeaders(config.token_2legged)
     const response = await get(endpoint, headers);
     if (response.length > 0) {
       console.log(`getting account projects ${offset} to ${offset + limit}`)
       allProjects = allProjects.concat(response);
-      await utility.delay(utility.DELAY_MILISECOND)  
-      return exportProjects(accountid, limit, allProjects.length, allProjects);
+      await utility.delay(utility.DELAY_MILISECOND * pageIndex)  
+      return exportProjects(accountid, limit, allProjects.length, allProjects,pageIndex);
     } else
       return allProjects
   } catch (e) {
@@ -26,16 +27,17 @@ async function exportProjects(accountid, limit, offset, allProjects) {
 }
 
 //export BIM 360 account companies , recursive function
-async function exportAccountCompanies(accountid, limit, offset, allCompanies) {
+async function exportAccountCompanies(accountid, limit, offset, allCompanies,pageIndex) {
   try {
+    pageIndex++
     const endpoint = `${config.ForgeBaseUrl}/hq/v1/accounts/${accountid}/companies?limit=${limit}&offset=${offset}`
     const headers = config.httpHeaders(config.token_2legged)
     const response = await get(endpoint, headers);
     if (response.length > 0) {
       console.log(`getting account companies ${offset} to ${offset + limit}`)
       allCompanies = allCompanies.concat(response);
-      await utility.delay(utility.DELAY_MILISECOND)  
-      return exportAccountCompanies(accountid, limit, allCompanies.length, allCompanies);
+      await utility.delay(utility.DELAY_MILISECOND*pageIndex)  
+      return exportAccountCompanies(accountid, limit, allCompanies.length, allCompanies,pageIndex);
     } else
       return allCompanies
   } catch (e) {
@@ -44,16 +46,17 @@ async function exportAccountCompanies(accountid, limit, offset, allCompanies) {
 }
 
 //export BIM 360 account users , recursive function
-async function exportAccountUsers(accountid, limit, offset, allUsers) {
+async function exportAccountUsers(accountid, limit, offset, allUsers,pageIndex) {
   try {
+    pageIndex++
     const endpoint = `${config.ForgeBaseUrl}/hq/v1/accounts/${accountid}/users?limit=${limit}&offset=${offset}`
     const headers = config.httpHeaders(config.token_2legged)
     const response = await get(endpoint, headers);
     if (response.length > 0) {
       console.log(`getting account users ${offset} to ${offset + limit}`)
       allUsers = allUsers.concat(response);
-      await utility.delay(utility.DELAY_MILISECOND)  
-      return exportAccountUsers(accountid, limit, allUsers.length, allUsers);
+      await utility.delay(utility.DELAY_MILISECOND*pageIndex)  
+      return exportAccountUsers(accountid, limit, allUsers.length, allUsers,pageIndex);
     } else
       return allUsers
   } catch (e) {
@@ -62,8 +65,9 @@ async function exportAccountUsers(accountid, limit, offset, allUsers) {
 }
 
 //export BIM 360 project users , recursive function
-async function exportProjectsUsers(accountid, projectId, projectName, limit, offset, allUsers) {
+async function exportProjectsUsers(accountid, projectId, projectName, limit, offset, allUsers,pageIndex) {
   try {
+    pageIndex++
     const endpoint = `${config.ForgeBaseUrl}/bim360/admin/v1/projects/${projectId}/users?limit=${limit}&offset=${offset}`
     const headers = config.httpHeaders(config.token_2legged)
     const response = await get(endpoint, headers);
@@ -71,14 +75,14 @@ async function exportProjectsUsers(accountid, projectId, projectName, limit, off
     if (response.results && response.results.length > 0) {
       console.log(`getting project ${projectName} users ${offset} to ${offset + limit}`)
       allUsers = allUsers.concat(response.results);
-      await utility.delay(utility.DELAY_MILISECOND)  
-      return exportProjectsUsers(accountid, projectId, projectName, limit, allUsers.length, allUsers);
+      await utility.delay(utility.DELAY_MILISECOND*pageIndex)  
+      return exportProjectsUsers(accountid, projectId, projectName, limit, allUsers.length, allUsers,pageIndex);
     } else {
 
       //now, sort it out with the explicit data of company name, access level, and accessible services of this user
       let promiseArr = allUsers.map(async (u, index) => {
         //must delay to avoid to hit rate limit
-        await utility.delay(index * utility.DELAY_MILISECOND)
+        await utility.delay(index * utility.DELAY_MILISECOND*2)
 
         var eachUser = {}
         eachUser.name = u.name
@@ -128,8 +132,9 @@ async function exportProjectsUsers(accountid, projectId, projectName, limit, off
 }
 
 //export BIM 360 project companies , recursive function
-async function exportProjectsCompanies(accountid, projectId, projectName, limit, offset, allCompanies) {
+async function exportProjectsCompanies(accountid, projectId, projectName, limit, offset, allCompanies,pageIndex) {
   try {
+    pageIndex++
     const endpoint = `${config.ForgeBaseUrl}/hq/v1/accounts/${accountid}/projects/${projectId}/companies?limit=${limit}&offset=${offset}`
     const headers = config.httpHeaders(config.token_2legged)
     const response = await get(endpoint, headers);
@@ -137,14 +142,14 @@ async function exportProjectsCompanies(accountid, projectId, projectName, limit,
     if (response && response.length > 0) {
       console.log(`getting project ${projectName} companies ${offset} to ${offset + limit}`)
       allCompanies = allCompanies.concat(response);
-      await utility.delay(utility.DELAY_MILISECOND*2)  
-      return exportProjectsCompanies(accountid, projectId, projectName, limit, allCompanies.length, allCompanies);
+      await utility.wait(utility.DELAY_MILISECOND*index)
+      return exportProjectsCompanies(accountid, projectId, projectName, limit, allCompanies.length, allCompanies,pageIndex);
     } else {
 
       //now, sort it out with the explicit data of company name, access level, and accessible services of this user
       let promiseArr = allCompanies.map(async (c, index) => {
         //must delay to avoid to hit rate limit
-        await utility.delay(index * utility.DELAY_MILISECOND*2)
+        await utility.delay(index * utility.DELAY_MILISECOND)
 
         var eachCompany = {}
         eachCompany.project = projectName; 
@@ -171,8 +176,9 @@ async function exportProjectsCompanies(accountid, projectId, projectName, limit,
 }
 
 //export BIM 360 project roles , recursive function
-async function exportProjectsRoles(accountid, projectId, projectName, limit, offset, allRoles) {
+async function exportProjectsRoles(accountid, projectId, projectName, limit, offset, allRoles,pageIndex) {
   try {
+    pageIndex++
     const endpoint = `${config.ForgeBaseUrl}/hq/v2/accounts/${accountid}/projects/${projectId}/industry_roles?limit=${limit}&offset=${offset}`
     const headers = config.httpHeaders(config.token_2legged)
     const response = await get(endpoint, headers);
@@ -180,14 +186,14 @@ async function exportProjectsRoles(accountid, projectId, projectName, limit, off
     if (response && response.length > 0) {
       console.log(`getting project ${projectName} roles ${offset} to ${offset + limit}`)
       allRoles = allRoles.concat(response);
-      await utility.delay(utility.DELAY_MILISECOND*2)  
-      return exportProjectsRoles(accountid, projectId, projectName, limit, allRoles.length, allRoles);
+      await utility.delay(utility.DELAY_MILISECOND*pageIndex)  
+      return exportProjectsRoles(accountid, projectId, projectName, limit, allRoles.length, allRoles,pageIndex);
     } else {
 
       //now, sort it out with the explicit data of company name, access level, and accessible services of this user
       let promiseArr = allRoles.map(async (r, index) => {
         //must delay to avoid to hit rate limit
-        await utility.delay(index * utility.DELAY_MILISECOND*2)
+        await utility.delay(index * utility.DELAY_MILISECOND*index)
 
         var eachRole = {}
         eachRole.project = projectName; 

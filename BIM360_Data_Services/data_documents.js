@@ -44,9 +44,10 @@ async function exportProjectDocuments(accountid, projectName, limit, offset) {
       allRawDocuments = utility.flatDeep(allRawDocuments, Infinity)
 
       //now sorting out the documents with the required data
+      console.log('starting sorting out the documents, including finding custom attributes')
       let promiseArr = allRawDocuments.map(async (d, index) => {
 
-        await utility.delay(index * utility.DELAY_MILISECOND)
+        await utility.delay(index * utility.DELAY_MILISECOND*2)
 
         const projectId = d.links.self.href.split('/')[6]
         const projectId_without_b = projectId.split('b.')[1]
@@ -198,8 +199,7 @@ async function getOneVersion(projectId, versionId) {
     const endpoint = `${config.ForgeBaseUrl}/data/v1/projects/${projectId}/versions/${versionId}`
     const headers = config.httpHeaders(config.token_3legged)
     const response = await get(endpoint, headers);
-    if (response && response.data) {
-
+    if (response && response.data) { 
 
       return response.data;
     } else {
@@ -241,5 +241,7 @@ async function getOneDocCustomAtt(projectId, versionId) {
 
 
 module.exports = {
-  exportProjectDocuments
+  exportProjectDocuments,
+  getOneVersion,
+  getOneDocCustomAtt
 };

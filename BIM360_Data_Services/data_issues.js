@@ -113,18 +113,18 @@ async function extractProjectIssuesImpl(containerId, limit, offset, allIssues) {
         for (var index in allCooments) {
           issue.comments += `${allCooments[index].attributes.body}\n`
         }
-        issue.customAttributes = []
+        issue.customAttributes = ''
         for (var index in issue.attributes.custom_attributes) {
           const eachCA = issue.attributes.custom_attributes[index]
           if (eachCA.type == 'list') {
             const customDefIndex = Defs[containerId].allIssueCustomAttDefs.findIndex(i => i.id == eachCA.id)
             const valueIndex = Defs[containerId].allIssueCustomAttDefs[customDefIndex].metadata.list.options.findIndex(i => i.id == eachCA.value)
             if (valueIndex > -1)
-              issue.customAttributes.push(Defs[containerId].allIssueCustomAttDefs[customDefIndex].metadata.list.options[valueIndex].value)
-            else
-              issue.customAttributes.push(eachCA.value)
+              issue.customAttributes += `${Defs[containerId].allIssueCustomAttDefs[customDefIndex].metadata.list.options[valueIndex].title},${Defs[containerId].allIssueCustomAttDefs[customDefIndex].metadata.list.options[valueIndex].value}\n`
+             else
+              issue.customAttributes += `${eachCA.title},${eachCA.value}\n`
           } else
-            issue.customAttributes.push(eachCA.value)
+            issue.customAttributes += `${eachCA.title},${eachCA.value}\n`
         }
         return issue;
       })
