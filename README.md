@@ -16,7 +16,7 @@ TODO
 3. project assets list
 
 
-![](/breakdown.png)
+![](/demo.png)
 
 
 # Setup
